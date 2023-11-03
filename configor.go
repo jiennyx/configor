@@ -90,7 +90,6 @@ func (configor *Configor) Load(config interface{}, files ...string) (err error) 
 		return fmt.Errorf("Config %v should be addressable", config)
 	}
 	err, _ = configor.load(config, false, files...)
-
 	if configor.Config.AutoReload {
 		go func() {
 			timer := time.NewTimer(configor.Config.AutoReloadInterval)

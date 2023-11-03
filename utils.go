@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path"
 	"reflect"
@@ -73,7 +72,7 @@ func (configor *Configor) getConfigurationFiles(config *Config, watchMode bool, 
 	}
 
 	var resultKeys []string
-	var results = map[string]time.Time{}
+	results := map[string]time.Time{}
 
 	if !watchMode && (configor.Config.Debug || configor.Config.Verbose) {
 		fmt.Printf("Current environment: '%v'\n", configor.GetEnvironment())
@@ -114,7 +113,7 @@ func (configor *Configor) getConfigurationFiles(config *Config, watchMode bool, 
 }
 
 func (c *Configor) processFile(config interface{}, file string, errorOnUnmatchedKeys bool) error {
-	readFile := ioutil.ReadFile
+	readFile := os.ReadFile
 	if c.FS != nil {
 		readFile = func(filename string) ([]byte, error) {
 			return fs.ReadFile(c.FS, filename)

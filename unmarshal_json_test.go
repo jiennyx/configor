@@ -2,7 +2,6 @@ package configor_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -20,7 +19,7 @@ func TestUnmatchedKeyInJsonConfigFile(t *testing.T) {
 	}
 	config := configFile{Name: "test", Test: "ATest"}
 
-	file, err := ioutil.TempFile("/tmp", "configor")
+	file, err := os.CreateTemp("/tmp", "configor")
 	if err != nil {
 		t.Fatal("Could not create temp file")
 	}
@@ -40,7 +39,6 @@ func TestUnmatchedKeyInJsonConfigFile(t *testing.T) {
 
 		// Return an error when there are unmatched keys and ErrorOnUnmatchedKeys is true
 		if err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&result, filename); err == nil || !strings.Contains(err.Error(), "json: unknown field") {
-
 			t.Errorf("Should get unknown field error when loading configuration with extra keys. Instead got error: %v", err)
 		}
 
@@ -65,8 +63,6 @@ func TestUnmatchedKeyInJsonConfigFile(t *testing.T) {
 
 	// Return an error when there are unmatched keys and ErrorOnUnmatchedKeys is true
 	if err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&result, filename); err == nil || !strings.Contains(err.Error(), "json: unknown field") {
-
 		t.Errorf("Should get unknown field error when loading configuration with extra keys. Instead got error: %v", err)
 	}
-
 }
